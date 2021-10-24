@@ -1,16 +1,18 @@
 package com.example.server.models;
 
-public class EatInfo {
+public class PlaceInfo {
     long id;
     String name;
     String imagePath;
     String address;
+    String type;
 
-    public EatInfo(long id, String name, String imagePath, String address) {
+    public PlaceInfo(long id, String name, String imagePath, String address, String type) {
         this.id = id;
         this.name = name;
         this.imagePath = imagePath;
         this.address = address;
+        this.type = type;
     }
 
     public long getId() {
@@ -43,5 +45,13 @@ public class EatInfo {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

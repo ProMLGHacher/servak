@@ -2,24 +2,30 @@ package com.example.server.controller;
 
 import com.example.server.models.CityInfo;
 import com.example.server.models.OnCityInfo;
-import com.example.server.models.getModels.Attractions;
+import com.example.server.models.PlaceInfo;
 import com.example.server.models.getModels.Cities;
-import com.example.server.models.getModels.Hotels;
+import com.example.server.models.getModels.Place;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class CityController {
 
     Cities cities = new Cities();
-    Hotels hotels = new Hotels();
-    Attractions attractions = new Attractions();
+    Place attractions = new Place();
 
     @GetMapping("/city/{id}")
-    public OnCityInfo getCityInfoFromId(@PathVariable("id") int id) {
-        return cities.getCitiesArray().get(id);
+    public ArrayList getCityInfoFromId(@PathVariable("id") int id) {
+        OnCityInfo onCityInfo = cities.getCitiesArray().get(id);
+        ArrayList<PlaceInfo> list = new ArrayList<>(onCityInfo.getAttractions());
+        list.addAll(onCityInfo.getHotels());
+        list.addAll(onCityInfo.getEat());
+        return list;
     }
+
+
 
     @GetMapping("/city")
     public ArrayList yep() {
@@ -29,37 +35,37 @@ public class CityController {
         returnList.add(new CityInfo(
                 0,
                 "Москва",
-                "https://rustur.ru/wp-content/uploads/2019/12/Russia_Moscow_Temples_445419-scaled.jpg"
+                "https://static-cse.canva.com/blob/249699/pexels-vierro-3629813.b14e694a.jpg"
         ));
 
         returnList.add(new CityInfo(
                 1,
                 "Сочи",
-                "https://xn--h1aaawkeh.xn--p1ai/wp-content/uploads/2018/10/image-2.jpg"
+                "https://12millionov.com/wp-content/uploads/2017/09/%D0%9E%D0%BB%D0%B8%D0%BC%D0%BF%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9-%D0%BF%D0%B0%D1%80%D0%BA.jpg"
         ));
 
         returnList.add(new CityInfo(
                 2,
                 "Краснодар",
-                "https://pilothub.ru/datas/folio/4960-stadion-krasnodar.jpg"
+                "https://gdezhivet.com/wp-content/uploads/2018/10/krasnodar4-e1539093787835.jpg"
         ));
 
         returnList.add(new CityInfo(
                 3,
                 "Анапа",
-                "https://www.miraterra.ru/wp-content/uploads/2020/03/Anapa-Resort-3.jpg"
+                "http://www.welcometoanapa.ru/f/images/2017/12/16/202245456.png"
         ));
 
         returnList.add(new CityInfo(
                 4,
                 "Санкт-Петербург",
-                "https://kipmu.ru/wp-content/uploads/pchspnzptr-1920x1197.jpg"
+                "http://www.peterburg.biz/images/place/razvodm7.jpg"
         ));
 
         returnList.add(new CityInfo(
                 5,
                 "Ростов на Дону",
-                "https://rostof.ru/sites/default/files/field/image/article/agyz-skduji.jpg"
+                "https://rostov.ru/uploads/posts/2020-08/1598627630_xxl-13.jpg"
         ));
 
         return returnList;

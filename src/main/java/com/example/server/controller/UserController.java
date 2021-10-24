@@ -1,19 +1,40 @@
 package com.example.server.controller;
 
+import com.example.server.models.PlaceInfo;
+import com.example.server.models.Travel;
+import com.example.server.models.getModels.Place;
+import org.apache.commons.logging.Log;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
+    @PostMapping(path = "/route",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public String route(@RequestBody Travel travel) {
+        System.out.println(travel.getBudget() + " " + travel.getStartRoute());
+        return Ok(travel.getStartRoute(), travel.getEndRoute(), travel.getPlacesList());
+    }
+
+
+
+
+
+
+
+
 
     @GetMapping("/")
     public ResponseEntity getUsers(){
@@ -66,26 +87,38 @@ public class UserController {
         return bicycle;
     }
 
-    @GetMapping("/route")
-    public String Ok(String str0, String str1) {
+
+    public String Ok(String str0, String str1, List<PlaceInfo> placesList) {
 
 
+        StringBuilder forAdd = new StringBuilder();
+
+
+        forAdd.append(Geocod(str0)).append(";");
+
+        if (placesList.size() != 0) {
+            for (PlaceInfo place :
+                    placesList) {
+                forAdd.append(Geocod(place.getAddress())).append(";");
+            }
+        }
+
+        forAdd.append(Geocod(str1));
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.mapbox.com/directions/v5/mapbox/cycling/"+ Geocod(str0) + ";" + Geocod(str1) +"?geometries=geojson&access_token=sk.eyJ1IjoicXdlcnR5anVzdHRlc3QiLCJhIjoiY2t2M250ZjZ2NDlucDJvczd5Z21wMXA0biJ9.OoflJ5Q7AcDGws02P3dDGw"))
+                .uri(URI.create("https://api.mapbox.com/directions/v5/mapbox/cycling/"+ forAdd +"?geometries=geojson&access_token=sk.eyJ1IjoicXdlcnR5anVzdHRlc3QiLCJhIjoiY2t2M250ZjZ2NDlucDJvczd5Z21wMXA0biJ9.OoflJ5Q7AcDGws02P3dDGw"))
                 .build();
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        int a = response.body().indexOf("coordinates\":[") - 1;
+        int a = response.body().indexOf("coordinates\":[") + 14;
         int b = response.body().indexOf(",\"type");
-        String bibycle = "{" + response.body().substring(a,b) + "}";
+        String bibycle = "[" + response.body().substring(a,b);
+        System.out.println(bibycle);
         return bibycle;
     }
 

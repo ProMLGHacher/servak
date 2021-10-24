@@ -2,13 +2,14 @@ package com.example.server.models.getModels;
 
 import com.example.server.models.OnCityInfo;
 
+
 import java.util.ArrayList;
 
 public class Cities {
 
-    Hotels hotels = new Hotels();
-    Attractions attractions = new Attractions();
-    Eat eat = new Eat();
+    Place hotels = new Place();
+    Place attractions = new Place();
+    Place eat = new Place();
 
     OnCityInfo moscow = new OnCityInfo(
             hotels.getMoscowHotels(),
@@ -58,19 +59,29 @@ public class Cities {
         return citiesArray;
     }
 
-    public Hotels getHotels() {
+
+
+    public Place getEat() {
+        return eat;
+    }
+
+    public void setEat(Place eat) {
+        this.eat = eat;
+    }
+
+    public Place getHotels() {
         return hotels;
     }
 
-    public void setHotels(Hotels hotels) {
+    public void setHotels(Place hotels) {
         this.hotels = hotels;
     }
 
-    public Attractions getAttractions() {
+    public Place getAttractions() {
         return attractions;
     }
 
-    public void setAttractions(Attractions attractions) {
+    public void setAttractions(Place attractions) {
         this.attractions = attractions;
     }
 
